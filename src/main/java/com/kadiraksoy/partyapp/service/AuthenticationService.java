@@ -3,6 +3,7 @@ package com.kadiraksoy.partyapp.service;
 import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
+import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.user.Role;
 import com.kadiraksoy.partyapp.model.user.User;
@@ -111,5 +112,11 @@ public class AuthenticationService {
 
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
+
+//    public String updatePassword(Long id,String password){
+//
+//    }
+
+
 
 }

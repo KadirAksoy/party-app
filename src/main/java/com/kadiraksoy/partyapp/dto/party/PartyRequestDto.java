@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class PartyRequestDto {
 
     private String name;
+    private String description;
     private LocalDateTime eventDate;
     private LocalDateTime registrationEndDate;
     private int maxParticipants;

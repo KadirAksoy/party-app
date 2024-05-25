@@ -9,6 +9,7 @@ public class PartyResponseDto {
 
     private Long id;
     private String name;
+    private String description;
     private LocalDateTime eventDate;
     private LocalDateTime registrationEndDate;
     private int maxParticipants;

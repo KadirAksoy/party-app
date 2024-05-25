@@ -43,6 +43,7 @@ public class User implements UserDetails {
     private String otp;
     private LocalDateTime otpGeneratedTime;
 
+
     @PrePersist
     protected void onCreate() {
         createdTime = LocalDateTime.now();

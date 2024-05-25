@@ -39,6 +39,7 @@ public class PartyAppApplication {
 //					.password(passwordEncoder.encode("password"))
 //					.birthdayDate(birthdayDate)
 //					.role(Role.ROLE_USER)
+//					.active(true)
 //					.build();
 //
 //			User admin = User
@@ -49,6 +50,7 @@ public class PartyAppApplication {
 //					.password(passwordEncoder.encode("password"))
 //					.birthdayDate(birthdayDate)
 //					.role(Role.ROLE_ADMIN)
+//					.active(true)
 //					.build();
 //
 //			User superAdmin = User
@@ -59,6 +61,7 @@ public class PartyAppApplication {
 //					.password(passwordEncoder.encode("password"))
 //					.birthdayDate(birthdayDate)
 //					.role(Role.ROLE_SUPERADMIN)
+//					.active(true)
 //					.build();
 //
 //			userService.save(user);
