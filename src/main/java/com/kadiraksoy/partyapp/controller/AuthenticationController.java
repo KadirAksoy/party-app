@@ -4,10 +4,9 @@ import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
 import com.kadiraksoy.partyapp.service.AuthenticationService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,12 +19,23 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody UserRegisterRequest request) {
-        return authenticationService.signup(request);
+    public ResponseEntity<String> register(@RequestBody UserRegisterRequest registerDto) {
+        return new ResponseEntity<>(authenticationService.signup(registerDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/verify-account")
+    public ResponseEntity<String> verifyAccount(@RequestParam String email,
+                                                @RequestParam String otp) {
+        return new ResponseEntity<>(authenticationService.verifyAccount(email, otp), HttpStatus.OK);
+    }
+    @PutMapping("/regenerate-otp")
+    public ResponseEntity<String> regenerateOtp(@RequestParam String email) {
+        return new ResponseEntity<>(authenticationService.regenerateOtp(email), HttpStatus.OK);
     }
 
     @PostMapping("/signin")
     public JwtAuthenticationResponse signin(@RequestBody UserLoginRequest request) {
         return authenticationService.signin(request);
     }
+
 }

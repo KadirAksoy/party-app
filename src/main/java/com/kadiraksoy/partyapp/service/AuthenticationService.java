@@ -7,12 +7,16 @@ import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.UserRepository;
 import com.kadiraksoy.partyapp.security.JwtService;
+import com.kadiraksoy.partyapp.util.EmailUtil;
+import com.kadiraksoy.partyapp.util.OtpUtil;
+import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @Service
 public class AuthenticationService {
@@ -23,6 +27,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
+    private final OtpUtil otpUtil;
+    private final EmailUtil emailUtil;
 
     public AuthenticationService(
             UserRepository userRepository,
@@ -30,29 +36,65 @@ public class AuthenticationService {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             AuthenticationManager authenticationManager,
-            UserMapper userMapper) {
+            UserMapper userMapper,
+            OtpUtil otpUtil,
+            EmailUtil emailUtil) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.userMapper = userMapper;
+        this.otpUtil = otpUtil;
+        this.emailUtil = emailUtil;
     }
 
     //Yeni bir kullanıcının kaydını oluşturur.
     public String signup(UserRegisterRequest request) {
 
-        User user = userMapper.registerRequestToEntity(request);
-
-        user = userService.save(user);
-
-
-//        var jwt = jwtService.generateToken(user);
-//
-//        JwtAuthenticationResponse.builder().token(jwt).build();
-        return "kadir";
+        String otp = otpUtil.generateOtp();
+        try {
+            emailUtil.sendOtpEmail(request.getEmail(), otp);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Unable to send otp please try again");
+        }
+        User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setBirthdayDate(request.getBirthdayDate());
+        user.setOtp(otp);
+        user.setOtpGeneratedTime(LocalDateTime.now());
+        userRepository.save(user);
+        return "User registration successful";
+    }
+    public String verifyAccount(String email, String otp) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
+        if (user.getOtp().equals(otp) && Duration.between(user.getOtpGeneratedTime(),
+                LocalDateTime.now()).getSeconds() < (1 * 60)) {
+            user.setActive(true);
+            userRepository.save(user);
+            return "OTP verified you can login";
+        }
+        return "Please regenerate otp and try again";
     }
 
+    public String regenerateOtp(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
+        String otp = otpUtil.generateOtp();
+        try {
+            emailUtil.sendOtpEmail(email, otp);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Unable to send otp please try again");
+        }
+        user.setOtp(otp);
+        user.setOtpGeneratedTime(LocalDateTime.now());
+        userRepository.save(user);
+        return "Email sent... please verify account within 1 minute";
+    }
 
     //Kullanıcı girişini işler.
     public JwtAuthenticationResponse signin(UserLoginRequest request) {
