@@ -39,6 +39,9 @@ public class User implements UserDetails {
     private LocalDateTime updatedTime;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthdayDate;
+    private boolean active;
+    private String otp;
+    private LocalDateTime otpGeneratedTime;
 
     @PrePersist
     protected void onCreate() {

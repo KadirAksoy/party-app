@@ -40,15 +40,17 @@ public class AuthenticationService {
     }
 
     //Yeni bir kullanıcının kaydını oluşturur.
-    public JwtAuthenticationResponse signup(UserRegisterRequest request) {
+    public String signup(UserRegisterRequest request) {
 
         User user = userMapper.registerRequestToEntity(request);
 
         user = userService.save(user);
 
-        var jwt = jwtService.generateToken(user);
 
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+//        var jwt = jwtService.generateToken(user);
+//
+//        JwtAuthenticationResponse.builder().token(jwt).build();
+        return "kadir";
     }
 
 

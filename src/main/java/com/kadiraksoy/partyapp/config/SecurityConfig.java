@@ -75,10 +75,6 @@ public class SecurityConfig {
                                         "/swagger-ui.html"
                                 )
                                 .permitAll()
-
-
-
-
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -20,7 +20,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public JwtAuthenticationResponse signup(@RequestBody UserRegisterRequest request) {
+    public String signup(@RequestBody UserRegisterRequest request) {
         return authenticationService.signup(request);
     }
 
