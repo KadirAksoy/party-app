@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -36,6 +38,26 @@ public class UserService {
             newUser.setCreatedTime(LocalDateTime.now());
             return userRepository.save(newUser);
         } throw new UserAlreadyExistException("User already exits with email:" + user.get().getEmail());
+    }
+
+    public User update(Long id, User user){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+            optionalUser.get().setFirstName(user.getFirstName());
+            optionalUser.get().setLastName(user.getLastName());
+            optionalUser.get().setBirthdayDate(user.getBirthdayDate());
+            optionalUser.get().setPassword(user.getPassword());
+            userRepository.save(optionalUser.get());
+        }
+        return optionalUser.get();
+    }
+
+    public List<User> getAll(){
+        return userRepository.findAll();
+    }
+
+    public List<String> getAllEmails(){
+        return userRepository.findAll().stream().map(User::getEmail).collect(Collectors.toList());
     }
 
 }

@@ -33,7 +33,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(authenticationService.regenerateOtp(email), HttpStatus.OK);
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/signing")
     public JwtAuthenticationResponse signin(@RequestBody UserLoginRequest request) {
         return authenticationService.signin(request);
     }

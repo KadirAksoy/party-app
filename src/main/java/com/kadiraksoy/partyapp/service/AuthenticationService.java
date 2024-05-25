@@ -4,6 +4,7 @@ import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
 import com.kadiraksoy.partyapp.mapper.user.UserMapper;
+import com.kadiraksoy.partyapp.model.user.Role;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.UserRepository;
 import com.kadiraksoy.partyapp.security.JwtService;
@@ -51,7 +52,6 @@ public class AuthenticationService {
 
     //Yeni bir kullanıcının kaydını oluşturur.
     public String signup(UserRegisterRequest request) {
-
         String otp = otpUtil.generateOtp();
         try {
             emailUtil.sendOtpEmail(request.getEmail(), otp);
@@ -64,9 +64,12 @@ public class AuthenticationService {
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setBirthdayDate(request.getBirthdayDate());
+        user.setRole(Role.ROLE_USER);
         user.setOtp(otp);
         user.setOtpGeneratedTime(LocalDateTime.now());
+
         userRepository.save(user);
+
         return "User registration successful";
     }
     public String verifyAccount(String email, String otp) {
