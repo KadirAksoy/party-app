@@ -4,6 +4,7 @@ import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
 import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
+import com.kadiraksoy.partyapp.exception.UserNotActiveException;
 import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.user.Role;
 import com.kadiraksoy.partyapp.model.user.User;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -102,15 +104,18 @@ public class AuthenticationService {
 
     //Kullanıcı girişini işler.
     public JwtAuthenticationResponse signin(UserLoginRequest request) {
-
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password.")));
 
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
-        var jwt = jwtService.generateToken(user);
 
-        return JwtAuthenticationResponse.builder().token(jwt).build();
+        if(optionalUser.isPresent() && optionalUser.get().isActive()){
+            var jwt = jwtService.generateToken(optionalUser.get());
+
+            return JwtAuthenticationResponse.builder().token(jwt).build();
+        }throw new UserNotActiveException("User not active exception.");
+
     }
 
 //    public String updatePassword(Long id,String password){
