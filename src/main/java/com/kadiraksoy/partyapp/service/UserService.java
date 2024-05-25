@@ -1,5 +1,6 @@
 package com.kadiraksoy.partyapp.service;
 import com.kadiraksoy.partyapp.exception.UserAlreadyExistException;
+import com.kadiraksoy.partyapp.exception.UserNotFoundException;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,8 +49,9 @@ public class UserService {
             optionalUser.get().setBirthdayDate(user.getBirthdayDate());
             optionalUser.get().setPassword(user.getPassword());
             userRepository.save(optionalUser.get());
-        }
-        return optionalUser.get();
+            return optionalUser.get();
+        }throw new UserNotFoundException("User not found with id: " + id);
+
     }
 
     public List<User> getAll(){
