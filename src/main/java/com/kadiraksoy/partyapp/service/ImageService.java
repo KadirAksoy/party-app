@@ -27,7 +27,7 @@ public class ImageService {
     @Transactional
     public ImageData saveImageData(MultipartFile file, Long partyId) throws IOException{
         byte[] image = ImageUtils.compressImage(file.getBytes());
-//        FileCategoryResponse fileCategoryResponse = apiClient.getFileCategory(categoryId);
+
         Party party = null;
         if(party == null){
             ImageData newImageData = ImageData.builder()
@@ -49,7 +49,7 @@ public class ImageService {
         ImageData imageDataToUpdate = imageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image data not found with id: " + id));
 
-//        FileCategoryResponse fileCategoryResponse = apiClient.getFileCategory(categoryId);
+
         Party party = null;
         if(party == null){
             byte[] compressedImage = ImageUtils.compressImage(file.getBytes());

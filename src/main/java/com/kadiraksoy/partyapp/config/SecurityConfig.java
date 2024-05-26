@@ -66,6 +66,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/images/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE,"/api/images/**").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/images/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(
                                         "/auth/**",
                                         "/v2/api-docs",

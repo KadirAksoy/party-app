@@ -2,6 +2,7 @@ package com.kadiraksoy.partyapp.model.user;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kadiraksoy.partyapp.model.party.Party;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,15 @@ public class User implements UserDetails {
     private String otp;
     private LocalDateTime otpGeneratedTime;
 
+    @OneToMany(mappedBy = "admin")
+    private List<Party> parties;
+
+//    @ManyToMany(mappedBy = "participants")
+//    private List<Party> joinedParties;
+//
+//    @OneToMany(mappedBy = "user")
+//    private List<Comment> comments;
+
 
     @PrePersist
     protected void onCreate() {
@@ -64,7 +74,6 @@ public class User implements UserDetails {
         // our "username" for security is the email field
         return email;
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return true;
