@@ -30,9 +30,8 @@ public class PartyController {
     }
 
     @DeleteMapping("/delete/{partyId}")
-    public ResponseEntity<Void> deleteParty(@PathVariable Long partyId,
-                                            @RequestParam Long userId) {
-        partyService.deleteParty(partyId, userId);
+    public ResponseEntity<Void> deleteParty(@PathVariable Long partyId) {
+        partyService.deleteParty(partyId);
         return ResponseEntity.noContent().build();
     }
 

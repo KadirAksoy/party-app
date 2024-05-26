@@ -57,11 +57,11 @@ public class PartyService {
     }
 
 
-    public void deleteParty(Long partyId, Long userId) {
+    public void deleteParty(Long partyId) {
         Party party = partyRepository.findById(partyId)
                 .orElseThrow(() -> new PartyNotFoundException("Party with id " + partyId + " not found"));
 
-        User user = userService.getUserById(userId);
+
         partyRepository.delete(party);
     }
 

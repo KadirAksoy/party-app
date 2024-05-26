@@ -18,7 +18,6 @@ public class ImageResponseDto {
     private String name;
     private String type;
     private byte[] imageData;
-    private Long party;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
 }

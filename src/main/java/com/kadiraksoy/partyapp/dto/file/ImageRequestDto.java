@@ -16,5 +16,5 @@ public class ImageRequestDto {
     private String name;
     private String type;
     private byte[] imageData;
-    private Long partyId;
+
 }

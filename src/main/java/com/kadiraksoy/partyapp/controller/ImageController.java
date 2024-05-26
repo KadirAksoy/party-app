@@ -20,10 +20,9 @@ public class ImageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file,
-                                         @RequestParam("partyId") Long partyId) {
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            ImageData savedImageData = imageService.saveImageData(file, partyId);
+            ImageData savedImageData = imageService.saveImageData(file);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedImageData);
         } catch (IOException | PartyNotFoundException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -31,11 +30,9 @@ public class ImageController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateImage(@PathVariable("id") Long id,
-                                         @RequestParam("file") MultipartFile file,
-                                         @RequestParam("partyId") Long partyId) {
+    public ResponseEntity<?> updateImage(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
         try {
-            ImageData updatedImageData = imageService.updateImageData(id, file, partyId);
+            ImageData updatedImageData = imageService.updateImageData(id, file);
             return ResponseEntity.ok(updatedImageData);
         } catch (IOException | RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

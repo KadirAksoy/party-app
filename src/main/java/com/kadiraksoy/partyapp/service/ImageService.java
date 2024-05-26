@@ -1,6 +1,7 @@
 package com.kadiraksoy.partyapp.service;
 
 
+import com.kadiraksoy.partyapp.dto.party.PartyResponseDto;
 import com.kadiraksoy.partyapp.exception.PartyNotFoundException;
 import com.kadiraksoy.partyapp.model.file.ImageData;
 import com.kadiraksoy.partyapp.model.party.Party;
@@ -19,49 +20,47 @@ import java.time.LocalDateTime;
 public class ImageService {
 
     private final ImageRepository imageRepository;
+    private final PartyService partyService;
 
-    public ImageService(ImageRepository imageRepository) {
+    public ImageService(ImageRepository imageRepository, PartyService partyService) {
         this.imageRepository = imageRepository;
+        this.partyService = partyService;
     }
 
     @Transactional
-    public ImageData saveImageData(MultipartFile file, Long partyId) throws IOException{
+    public ImageData saveImageData(MultipartFile file) throws IOException, PartyNotFoundException{
         byte[] image = ImageUtils.compressImage(file.getBytes());
 
-        Party party = null;
-        if(party == null){
-            ImageData newImageData = ImageData.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(image)
-                    .partyId(partyId)
-                    .createdTime(LocalDateTime.now())
-                    .updatedTime(LocalDateTime.now())
-                    .build();
 
-            return imageRepository.save(newImageData);
-        }
-        throw new PartyNotFoundException("Category not found with id:" + partyId);
+
+        ImageData newImageData = ImageData.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .imageData(image)
+                .createdTime(LocalDateTime.now())
+                .updatedTime(LocalDateTime.now())
+                .build();
+        return imageRepository.save(newImageData);
+
     }
 
     @Transactional
-    public ImageData updateImageData(Long id, MultipartFile file, Long partyId) throws IOException {
+    public ImageData updateImageData(Long id, MultipartFile file) throws IOException {
         ImageData imageDataToUpdate = imageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image data not found with id: " + id));
 
 
-        Party party = null;
-        if(party == null){
-            byte[] compressedImage = ImageUtils.compressImage(file.getBytes());
 
-            imageDataToUpdate.setName(file.getOriginalFilename());
-            imageDataToUpdate.setType(file.getContentType());
-            imageDataToUpdate.setImageData(compressedImage);
-            imageDataToUpdate.setPartyId(partyId);
-            imageDataToUpdate.setUpdatedTime(LocalDateTime.now());
-            return imageRepository.save(imageDataToUpdate);
-        }
-        throw new PartyNotFoundException("Category not found with id:" + partyId);
+        byte[] compressedImage = ImageUtils.compressImage(file.getBytes());
+
+        imageDataToUpdate.setName(file.getOriginalFilename());
+        imageDataToUpdate.setType(file.getContentType());
+        imageDataToUpdate.setImageData(compressedImage);
+
+        imageDataToUpdate.setUpdatedTime(LocalDateTime.now());
+        return imageRepository.save(imageDataToUpdate);
+
+
 
     }
 

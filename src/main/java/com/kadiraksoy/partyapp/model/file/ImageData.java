@@ -25,9 +25,6 @@ public class ImageData {
     @Column(name = "imagedata", length = 2000)
     private byte[] imageData;
 
-    @Column(name = "party_id")
-    private Long partyId;
-
     @Column(nullable = false)
     private LocalDateTime createdTime;
 
