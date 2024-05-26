@@ -1,11 +1,19 @@
-#version: '3.8'
-#services:
-#  zipkin:
-#    image: openzipkin/zipkin
-#    container_name: zipkin
-#    ports:
-#      - "9411:9411"
-#
+version: '3.8'
+services:
+  redis-server:
+    container_name: redis
+    image: 'redis'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6379:6379"
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
 #  # Kafka hizmeti, Kafka sunucusunu baslatir.
 #  kafka:
 #    image: confluentinc/cp-kafka:latest
@@ -64,3 +72,4 @@
 #      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
 #      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 #
+

@@ -109,7 +109,6 @@ public class AuthenticationService {
         Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password.")));
 
-
         if(optionalUser.isPresent() && optionalUser.get().isActive()){
             var jwt = jwtService.generateToken(optionalUser.get());
 
