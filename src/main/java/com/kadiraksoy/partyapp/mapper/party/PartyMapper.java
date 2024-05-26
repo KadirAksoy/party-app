@@ -23,6 +23,7 @@ public class PartyMapper {
                 .eventDate(partyRequestDto.getEventDate())
                 .participantLimit(partyRequestDto.getParticipantLimit())
                 .imageId(partyRequestDto.getImageId())
+                .active(true)
                 .build();
     }
 
@@ -38,6 +39,7 @@ public class PartyMapper {
                 .imageId(party.getImageId())
                 .participants(userMapper.toUserResponseDtoList(party.getParticipants()))
                 .admin(userMapper.toUserResponseDto(party.getAdmin()))
+                .active(party.isActive())
                 .build();
     }
 }

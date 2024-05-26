@@ -42,6 +42,7 @@ public class Party {
     )
     private List<User> participants;
     private Long imageId;
+    private boolean active;
 //    @OneToMany(mappedBy = "party")
 //    private List<Comment> comments;
 

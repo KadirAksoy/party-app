@@ -28,4 +28,5 @@ public class PartyResponseDto {
     private UserResponseDto admin;
     private List<UserResponseDto> participants;
     private Long imageId;
+    private boolean active;
 }
