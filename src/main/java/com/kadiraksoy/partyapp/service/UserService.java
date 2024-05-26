@@ -3,6 +3,9 @@ import com.kadiraksoy.partyapp.exception.UserAlreadyExistException;
 import com.kadiraksoy.partyapp.exception.UserNotFoundException;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,6 +36,7 @@ public class UserService {
         };
     }
 
+    @CacheEvict(value = {"users", "user_id"}, allEntries = true)
     public User save(User newUser) {
         Optional<User> user = userRepository.findByEmail(newUser.getEmail());
         if (user.isEmpty()) {
@@ -41,6 +45,7 @@ public class UserService {
         } throw new UserAlreadyExistException("User already exits with email:" + user.get().getEmail());
     }
 
+    @CachePut(cacheNames = "user_id", key = "'getUserById' + #dto.id", unless = "#result == null")
     public User update(Long id, User user){
         Optional<User> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()){
@@ -53,11 +58,12 @@ public class UserService {
         }throw new UserNotFoundException("User not found with id: " + id);
 
     }
-
+    @Cacheable(cacheNames = "user_id", key = "#root.methodName + #id", unless = "#result == null")
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
+    @Cacheable(value = "users", key = "#root.methodName", unless = "#result == null")
     public List<User> getAll(){
         return userRepository.findAll();
     }
