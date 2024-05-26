@@ -3,6 +3,7 @@ package com.kadiraksoy.partyapp;
 
 import com.kadiraksoy.partyapp.model.user.Role;
 import com.kadiraksoy.partyapp.model.user.User;
+import com.kadiraksoy.partyapp.repository.UserRepository;
 import com.kadiraksoy.partyapp.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +26,7 @@ public class PartyAppApplication {
 
 
 //	@Bean
-//	CommandLineRunner runner(UserService userService, PasswordEncoder passwordEncoder){
+//	CommandLineRunner runner(UserRepository userRepository, PasswordEncoder passwordEncoder){
 //		return args -> {
 //			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //			Date birthdayDate = dateFormat.parse("1990-05-20");
@@ -64,11 +65,9 @@ public class PartyAppApplication {
 //					.active(true)
 //					.build();
 //
-//			userService.save(user);
-//			userService.save(admin);
-//			userService.save(superAdmin);
-//
-//
+//			userRepository.save(user);
+//			userRepository.save(admin);
+//			userRepository.save(superAdmin);
 //		};
 //	}
 

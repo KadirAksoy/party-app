@@ -45,9 +45,7 @@ public class EmailService {
                 sendMail(user.getEmail(), user.getFirstName(), user.getLastName(), message);
                 emailList.add(user.getEmail());
             } catch (MessagingException e) {
-
                 System.err.println("Mail gönderilirken bir hata oluştu: " + user.getEmail());
-
             }
         }
         EmailResponseDto emailResponseDto = new EmailResponseDto(emailList, message);

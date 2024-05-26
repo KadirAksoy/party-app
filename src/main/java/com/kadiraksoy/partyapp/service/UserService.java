@@ -60,7 +60,7 @@ public class UserService {
     }
     @Cacheable(cacheNames = "user_id", key = "#root.methodName + #id", unless = "#result == null")
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @Cacheable(value = "users", key = "#root.methodName", unless = "#result == null")
