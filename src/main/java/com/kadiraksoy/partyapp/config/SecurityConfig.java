@@ -76,6 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         //PartyController
                         .requestMatchers(HttpMethod.GET,"/api/parties/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/parties/{partyId}/leave","/api/parties/{partyId}/attend").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")

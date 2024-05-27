@@ -2,6 +2,7 @@ package com.kadiraksoy.partyapp.controller;
 import com.kadiraksoy.partyapp.dto.party.PartyRequestDto;
 import com.kadiraksoy.partyapp.dto.party.PartyResponseDto;
 import com.kadiraksoy.partyapp.service.PartyService;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +48,20 @@ public class PartyController {
     public ResponseEntity<List<PartyResponseDto>> getAllParties() {
         List<PartyResponseDto> parties = (List<PartyResponseDto>) partyService.getAll();
         return ResponseEntity.ok(parties);
+    }
+
+    @PostMapping("/{partyId}/attend")
+    public ResponseEntity<PartyResponseDto> attendParty(@PathVariable Long partyId,
+                                                        @RequestParam Long userId) throws MessagingException {
+        PartyResponseDto party = partyService.attendParty(partyId, userId);
+        return new ResponseEntity<>(party, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/{partyId}/leave")
+    public ResponseEntity<PartyResponseDto> leaveParty(@PathVariable Long partyId,
+                                                       @RequestParam Long userId) throws MessagingException {
+        PartyResponseDto party = partyService.leaveParty(partyId, userId);
+        return new ResponseEntity<>(party, HttpStatus.OK);
     }
 }

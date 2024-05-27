@@ -9,6 +9,7 @@ import com.kadiraksoy.partyapp.mapper.party.PartyMapper;
 import com.kadiraksoy.partyapp.model.party.Party;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.PartyRepository;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -88,7 +89,53 @@ public class PartyService {
         return partyRepository.findAll().stream().map(partyMapper::entityToPartyResponseDto).toList();
     }
 
-//    public PartyResponseDto attendParty(){}
+    public PartyResponseDto attendParty(Long partyId, Long userId) throws MessagingException {
+        Party party = partyRepository.findById(partyId)
+                .orElseThrow(() -> new PartyNotFoundException("Party with id " + partyId + " not found"));
+
+        User user = userService.getUserById(userId);
+        if (party.getParticipants().contains(user)) {
+            throw new IllegalStateException("User with id " + userId + " is already attending the party");
+        }
+        if (party.getParticipants().size() >= party.getParticipantLimit()) {
+            throw new IllegalStateException("Party with id " + partyId + " has reached its participant limit");
+        }
+        party.getParticipants().add(user);
+        Party updatedParty = partyRepository.save(party);
+
+        emailService.sendMail(user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                "Partiye katıldınız.Parti bilgileri:"
+                        + party.getTitle()
+                        + party.getDescription()
+                        + party.getEventDate());
+
+        log.info("User " + userId + " has joined the party " + partyId);
+
+        return partyMapper.entityToPartyResponseDto(updatedParty);
+    }
+
+    public PartyResponseDto leaveParty(Long partyId, Long userId) throws MessagingException {
+        Party party = partyRepository.findById(partyId)
+                .orElseThrow(() -> new PartyNotFoundException("Party with id " + partyId + " not found"));
+
+        User user = userService.getUserById(userId);
+        if (!party.getParticipants().contains(user)) {
+            throw new IllegalStateException("User with id " + userId + " is not attending the party");
+        }
+
+        party.getParticipants().remove(user);
+        Party updatedParty = partyRepository.save(party);
+
+        emailService.sendMail(user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                "Partiden ayrıldınız. Parti adı:" + party.getTitle());
+        log.info("User " + userId + " has left the party " + partyId);
+
+        return partyMapper.entityToPartyResponseDto(updatedParty);
+    }
 
 
 }
