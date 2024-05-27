@@ -2,13 +2,14 @@
 Bu projede kullanıcılar user,admin,super-admin olarak ayrılıyor. Adminler parti oluşturabilme gibi çeşitli yetkilere sahip. Userlar ise parti görüntüleme, katılma gibi benzer yetkilere sahiptir. Super-admin ise uygulama adminidir.
 
 # Yapılandırmalar
-Uygulama Başlatılmadan önce application.properties dosyasından database - mail gibi ayarlar yapılmalıdır.
+Uygulama Başlatılmadan önce application.properties dosyasından mail ayarları yapılmalıdır.
 
 ### Önkoşullar
 
 Projenin çalıştırılması için aşağıdaki yazılımların yüklü olması gerekmektedir:
 
 - Docker
+- Maven
 - Java
 
 # Özellikler
