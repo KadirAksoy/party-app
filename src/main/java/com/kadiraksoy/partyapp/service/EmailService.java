@@ -53,5 +53,29 @@ public class EmailService {
         return emailResponseDto;
     }
 
+    public void sendMailToRequest(String email) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Admin");
+        mimeMessageHelper.setText("<div> Admin olma talebi başarılı bir şekilde gönderildi.</div>", true);
+
+        javaMailSender.send(mimeMessage);
+        log.info("mail gönderildi.");
+    }
+
+    public void sendMailToAdmin(String email) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Admin");
+        mimeMessageHelper.setText("<div> Tebrikler, Admin oldunuzz.</div>", true);
+
+        javaMailSender.send(mimeMessage);
+        log.info("mail gönderildi.");
+    }
+
+
+
 
 }

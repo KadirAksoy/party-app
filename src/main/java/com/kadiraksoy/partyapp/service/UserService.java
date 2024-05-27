@@ -72,4 +72,8 @@ public class UserService {
         return userRepository.findAll().stream().map(User::getEmail).collect(Collectors.toList());
     }
 
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User not found"));
+    }
+
 }

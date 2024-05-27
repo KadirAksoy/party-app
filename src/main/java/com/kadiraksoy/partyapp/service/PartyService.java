@@ -42,6 +42,12 @@ public class PartyService {
         partyRepository.save(party);
         log.info("party:" + party);
 
+        // Kafkaya yollayıp yap.
+        emailService.sendMailAllUsers("Partiye davetlisiniz:"
+                + party.getTitle()
+                + party.getDescription()
+                + party.getEventDate());
+
         return partyMapper.entityToPartyResponseDto(party);
     }
 
@@ -76,6 +82,8 @@ public class PartyService {
     public List<PartyResponseDto> getAll(){
         return partyRepository.findAll().stream().map(partyMapper::entityToPartyResponseDto).toList();
     }
+
+//    public PartyResponseDto attendParty(){}
 
 
 }
