@@ -20,6 +20,7 @@ Uygulama Başlatılmadan önce application.properties dosyasından mail ayarlar�
 `
 spring.mail.username=email-adress
 `
+
 `
 spring.mail.password=app-password
 `
