@@ -56,24 +56,36 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/api/users/signup", "/api/users/signing","/api/users/verify-account","/api/users/regenerate-otp").permitAll()
+                        //AuthController
+                        .requestMatchers(HttpMethod.POST, "/api/users/signup", "/api/users/signing").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/users/regenerate-otp", "/api/users/verify-account").permitAll()
+                        //UserController
+                        .requestMatchers(HttpMethod.GET,"/api/users/super-admin/**").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/users/super-admin/**").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/users/super-admin/**").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/users/super-admin/**").hasAuthority("ROLE_SUPERADMIN")
+                        //TestController
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/anon").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/users").hasAnyAuthority("ROLE_USER","ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/admins").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/superadmin").hasAuthority("ROLE_SUPERADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/images/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/images/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/images/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT,"/api/images/**").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        //ImageController
+                        .requestMatchers(HttpMethod.GET,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        //PartyController
+                        .requestMatchers(HttpMethod.GET,"/api/parties/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
-                        .requestMatchers(HttpMethod.GET,"/api/requests/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/requests/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/requests/**").permitAll()
+                        //RequestController
+                        .requestMatchers(HttpMethod.GET,"/api/requests/**").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/requests/send").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/requests/accept").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/requests/**").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/requests/**").permitAll()
+                        //Swagger
                         .requestMatchers(
                                         "/auth/**",
                                         "/v2/api-docs",

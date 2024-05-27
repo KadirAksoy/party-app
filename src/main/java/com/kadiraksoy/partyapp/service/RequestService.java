@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -64,7 +65,10 @@ public class RequestService {
         log.info("request silindi.");
 
         emailService.sendMailToDelete(email);
+    }
 
+    public RequestResponseDto getAll(){
+        return (RequestResponseDto) requestRepository.findAll().stream().map(requestMapper::entityToResponseDto).collect(Collectors.toList());
     }
 
 
