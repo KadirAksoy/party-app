@@ -1,5 +1,17 @@
 version: '3.8'
 services:
+  mysql_db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: partydb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+      -
   redis-server:
     container_name: redis
     image: 'redis'
@@ -8,11 +20,11 @@ services:
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - "6379:6379"
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: zipkin
-    ports:
-      - "9411:9411"
+#  zipkin:
+#    image: openzipkin/zipkin
+#    container_name: zipkin
+#    ports:
+#      - "9411:9411"
 
   # Kafka hizmeti, Kafka sunucusunu baslatir.
   kafka:
@@ -41,23 +53,6 @@ services:
       ZK_SERVER_HEAP: "-Xmx256M -Xms256M"  # ZooKeeper'in bellek yapilandirmalarini belirler.
     ports:
       - 52181:2181  # ZooKeeper'a disaridan erisim saglar.
-
-  #    # Kafka Connect hizmeti, Kafka veri akislarini kaydetmek ve islemek icin kullanilir.
-  #  kafka_connect:
-  #      container_name: kafka_connect
-  #      image: debezium/connect
-  #      links:
-  #        - db
-  #         - kafka
-  #      ports:
-  #        - '8083:8083'  # Kafka Connect REST API'ya disaridan erisim saglar.
-  #      environment:
-  #        - BOOTSTRAP_SERVERS=kafka:9092  # Kafka sunucusuna baglanma ayarlarini tanimlar.
-  #        - GROUP_ID=medium_debezium
-  #        - CONFIG_STORAGE_TOPIC=my_connect_configs
-  #         - OFFSET_STORAGE_TOPIC=my_connect_offsets
-  #         - STATUS_STORAGE_TOPIC=my_connect_statuses
-
   kafka-ui:
     container_name: kafka-ui
     image: provectuslabs/kafka-ui:latest
@@ -72,4 +67,16 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
+  party_app:
+    build:
+      context: ./party-app
+      dockerfile: Dockerfile
+    container_name: party-app
+    ports:
+      - "8080:8080"
+    networks:
+      - back-tier
+    restart: always
 
+networks:
+  back-tier:
