@@ -1,11 +1,14 @@
 package com.kadiraksoy.partyapp.service;
 
 
+import com.kadiraksoy.partyapp.dto.kafka.JoinPartyDto;
 import com.kadiraksoy.partyapp.dto.party.PartyRequestDto;
 import com.kadiraksoy.partyapp.dto.party.PartyResponseDto;
+import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.exception.PartyNotFoundException;
 import com.kadiraksoy.partyapp.kafka.producer.KafkaProducer;
 import com.kadiraksoy.partyapp.mapper.party.PartyMapper;
+import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.party.Party;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.PartyRepository;
@@ -24,17 +27,19 @@ public class PartyService {
     private final UserService userService;
     private final EmailService emailService;
     private final KafkaProducer kafkaProducer;
+    private final UserMapper userMapper;
 
     public PartyService(PartyRepository partyRepository,
                         PartyMapper partyMapper,
                         UserService userService,
                         EmailService emailService,
-                        KafkaProducer kafkaProducer) {
+                        KafkaProducer kafkaProducer, UserMapper userMapper) {
         this.partyRepository = partyRepository;
         this.partyMapper = partyMapper;
         this.userService = userService;
         this.emailService = emailService;
         this.kafkaProducer = kafkaProducer;
+        this.userMapper = userMapper;
     }
 
     public PartyResponseDto createParty(PartyRequestDto partyRequestDto){
@@ -52,7 +57,7 @@ public class PartyService {
 //                + party.getTitle()
 //                + party.getDescription()
 //                + party.getEventDate());
-        kafkaProducer.producePartyRequestDtoData(partyRequestDto);
+        kafkaProducer.sendPartyCreateMessage(partyRequestDto);
 
         return partyMapper.entityToPartyResponseDto(party);
     }
@@ -103,13 +108,24 @@ public class PartyService {
         party.getParticipants().add(user);
         Party updatedParty = partyRepository.save(party);
 
-        emailService.sendMail(user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                "Partiye katıldınız.Parti bilgileri:"
-                        + party.getTitle()
-                        + party.getDescription()
-                        + party.getEventDate());
+        JoinPartyDto joinPartyDto = JoinPartyDto.builder()
+                .title(party.getTitle())
+                .description(party.getDescription())
+                .eventDate(party.getEventDate())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
+
+        kafkaProducer.sendPartyJoinMessage(joinPartyDto);
+
+//        emailService.sendMail(user.getEmail(),
+//                user.getFirstName(),
+//                user.getLastName(),
+//                "Partiye katıldınız.Parti bilgileri:"
+//                        + partyResponseDto.getTitle()
+//                        + partyResponseDto.getDescription()
+//                        + partyResponseDto.getEventDate());
 
         log.info("User " + userId + " has joined the party " + partyId);
 
