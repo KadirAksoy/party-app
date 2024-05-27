@@ -30,7 +30,7 @@ Projenin çalıştırılması için aşağıdaki yazılımların yüklü olması
 1. Bu projeyi klonlayın:
 
 ```
-https://github.com/KadirAksoy/restaurant-app.git
+https://github.com/KadirAksoy/party-app.git
 ```
 
 
