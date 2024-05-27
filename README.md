@@ -17,6 +17,12 @@ Bu projede kullanıcılar user,admin,super-admin olarak ayrılıyor. Adminler pa
 # Yapılandırmalar
 Uygulama Başlatılmadan önce application.properties dosyasından mail ayarları yapılmalıdır.
 
+`
+spring.mail.username=email-adress
+spring.mail.password=app-password
+`
+
+
 ### Önkoşullar
 
 Projenin çalıştırılması için aşağıdaki yazılımların yüklü olması gerekmektedir:
