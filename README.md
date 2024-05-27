@@ -48,7 +48,7 @@ docker build -t party_app:0.0.1 .   ---> image oluşturur.
 docker run -d --name party_app -p 8080:8080 party_app:0.0.1
 ```
 
-4. Projeyi derlemek ve çalıştırmak için isterseniz mavenda kullanabilirsiniz :
+4. Projeyi derlemek ve çalıştırmak için isterseniz Maven da kullanabilirsiniz :
 
 ```
 cd party-app
@@ -65,7 +65,7 @@ Parti : Adminler parti oluşturup, silebilir. Süresi geçen partilerin aktifli�
 
 Request : Userlar admin olma isteği atabilirler.
 
-Üyelik : Kullanıcılar ilk olarak user olarak üye olurlar. 
+Üyelik : Kullanıcılar ilk olarak user olarak üye olurlar. Mail yolu ile hesabı aktif etme işlemleri gerçekleştirilir. Giriş yaptıktan sonra Jwt token oluşturulur ve istekler atılabilir.
 
 Mail : Kullanıcılara belli işlemlerde mail gönderilir.
 
