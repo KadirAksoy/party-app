@@ -1,4 +1,4 @@
-## Resim, Dosya ve Not Yönetim Uygulaması
+## Parti Eğlence Uygulaması
 Bu projede kullanıcılar user,admin,super-admin olarak ayrılıyor. Adminler parti oluşturabilme gibi çeşitli yetkilere sahip. Userlar ise parti görüntüleme, katılma gibi benzer yetkilere sahiptir. Super-admin ise uygulama adminidir.
 
 # Yapılandırmalar
