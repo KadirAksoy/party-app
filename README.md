@@ -4,7 +4,7 @@ Bu projede kullanıcılar user,admin,super-admin olarak ayrılıyor. Adminler pa
 # Özellikler
 Resim : Adminler partilere resim yükler.
 
-Parti : Adminler parti oluşturup, silebilir. Süresi geçen partilerin aktifliği sistem tarafından otomatik olarak kapatılır.
+Parti : Adminler parti oluşturup, silebilir. Süresi geçen partilerin aktifliği sistem tarafından otomatik olarak kapatılır. Partiye katılma ve çıkma işlemleri yapılır.
 
 Request : Userlar admin olma isteği atabilirler.
 
