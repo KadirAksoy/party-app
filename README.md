@@ -41,12 +41,22 @@ https://github.com/KadirAksoy/party-app.git
 docker-compose up -d
 ```
 
-3. Projeyi derlemek ve çalıştırmak için aşağıdaki Maven komutlarını kullanın:
+3. Projeyi derlemek ve çalıştırmak için aşağıdaki komutlarını kullanın:
 
 ```
 docker build -t party_app:0.0.1 .   ---> image oluşturur.
 docker run -d --name party_app -p 8080:8080 party_app:0.0.1
 ```
+
+4. Projeyi derlemek ve çalıştırmak için isterseniz mavenda kullanabilirsiniz :
+
+```
+cd party-app
+mvn clean install
+mvn spring-boot:run
+```
+
+
 
 # Özellikler
 Resim : Adminler partilere resim yükler.
