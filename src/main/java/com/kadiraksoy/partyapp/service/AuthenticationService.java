@@ -3,7 +3,6 @@ package com.kadiraksoy.partyapp.service;
 import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
-import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.exception.UserNotActiveException;
 import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.user.Role;
@@ -33,6 +32,7 @@ public class AuthenticationService {
     private final UserMapper userMapper;
     private final OtpUtil otpUtil;
     private final EmailUtil emailUtil;
+    private final EmailService emailService;
 
     public AuthenticationService(
             UserRepository userRepository,
@@ -42,7 +42,8 @@ public class AuthenticationService {
             AuthenticationManager authenticationManager,
             UserMapper userMapper,
             OtpUtil otpUtil,
-            EmailUtil emailUtil) {
+            EmailUtil emailUtil,
+            EmailService emailService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -51,6 +52,7 @@ public class AuthenticationService {
         this.userMapper = userMapper;
         this.otpUtil = otpUtil;
         this.emailUtil = emailUtil;
+        this.emailService = emailService;
     }
 
     //Yeni bir kullanıcının kaydını oluşturur.
@@ -65,7 +67,7 @@ public class AuthenticationService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setBirthdayDate(request.getBirthdayDate());
         user.setRole(Role.ROLE_USER);
         user.setOtp(otp);
@@ -75,13 +77,14 @@ public class AuthenticationService {
 
         return "User registration successful";
     }
-    public String verifyAccount(String email, String otp) {
+    public String verifyAccount(String email, String otp) throws MessagingException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found with this email: " + email));
         if (user.getOtp().equals(otp) && Duration.between(user.getOtpGeneratedTime(),
                 LocalDateTime.now()).getSeconds() < (1 * 60)) {
             user.setActive(true);
             userRepository.save(user);
+            emailService.sendMail(email, user.getFirstName(), user.getLastName(), "Welcomte to Party!!");
             return "OTP verified you can login";
         }
         return "Please regenerate otp and try again";

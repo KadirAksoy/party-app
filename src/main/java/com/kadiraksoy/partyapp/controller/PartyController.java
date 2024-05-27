@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/parties")
 public class PartyController {
@@ -39,5 +41,11 @@ public class PartyController {
     public ResponseEntity<PartyResponseDto> getParty(@PathVariable Long partyId) {
         PartyResponseDto party = partyService.getParty(partyId);
         return ResponseEntity.ok(party);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PartyResponseDto>> getAllParties() {
+        List<PartyResponseDto> parties = (List<PartyResponseDto>) partyService.getAll();
+        return ResponseEntity.ok(parties);
     }
 }

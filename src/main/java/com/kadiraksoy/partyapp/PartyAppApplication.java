@@ -24,7 +24,7 @@ public class PartyAppApplication {
 		SpringApplication.run(PartyAppApplication.class, args);
 	}
 
-
+//
 //	@Bean
 //	CommandLineRunner runner(UserRepository userRepository, PasswordEncoder passwordEncoder){
 //		return args -> {

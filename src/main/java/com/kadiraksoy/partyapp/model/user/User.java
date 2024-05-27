@@ -46,6 +46,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "admin")
     private List<Party> parties;
+    @OneToMany(mappedBy = "admin")
+    private List<Party> adminParties;
+
+    @ManyToMany(mappedBy = "participants")
+    private List<Party> participantParties;
 
 //    @ManyToMany(mappedBy = "participants")
 //    private List<Party> joinedParties;
@@ -92,5 +97,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstName + '\'' +
+                ", lastname='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

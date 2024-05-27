@@ -4,6 +4,7 @@ import com.kadiraksoy.partyapp.dto.user.JwtAuthenticationResponse;
 import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
 import com.kadiraksoy.partyapp.service.AuthenticationService;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AuthenticationController {
 
     @PutMapping("/verify-account")
     public ResponseEntity<String> verifyAccount(@RequestParam String email,
-                                                @RequestParam String otp) {
+                                                @RequestParam String otp) throws MessagingException {
         return new ResponseEntity<>(authenticationService.verifyAccount(email, otp), HttpStatus.OK);
     }
     @PutMapping("/regenerate-otp")

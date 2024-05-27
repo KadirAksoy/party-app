@@ -42,8 +42,24 @@ public class Party {
     )
     private List<User> participants;
     private Long imageId;
-//    private boolean active;
+    private boolean active;
 //    @OneToMany(mappedBy = "party")
 //    private List<Comment> comments;
+
+    @Override
+    public String toString() {
+        return "Party{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", eventDate=" + eventDate +
+                ", participantLimit=" + participantLimit +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
+                ", adminId=" + (admin != null ? admin.getId() : null) + // Avoid direct reference to User toString
+                ", imageId=" + imageId +
+                ", active=" +  active +
+                '}';
+    }
 
 }
