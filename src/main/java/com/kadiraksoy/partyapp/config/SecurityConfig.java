@@ -70,6 +70,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/parties/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/requests/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/requests/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/requests/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/api/requests/**").permitAll()
                         .requestMatchers(
                                         "/auth/**",
                                         "/v2/api-docs",

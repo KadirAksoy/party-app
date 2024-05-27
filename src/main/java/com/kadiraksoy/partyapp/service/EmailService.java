@@ -42,8 +42,10 @@ public class EmailService {
         List<String> emailList = new ArrayList<>();
         for (User user : userList) {
             try {
-                sendMail(user.getEmail(), user.getFirstName(), user.getLastName(), message);
-                emailList.add(user.getEmail());
+                if(user.isActive()){
+                    sendMail(user.getEmail(), user.getFirstName(), user.getLastName(), message);
+                    emailList.add(user.getEmail());
+                }
             } catch (MessagingException e) {
                 System.err.println("Mail gönderilirken bir hata oluştu: " + user.getEmail());
             }
@@ -70,6 +72,17 @@ public class EmailService {
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject("Admin");
         mimeMessageHelper.setText("<div> Tebrikler, Admin oldunuzz.</div>", true);
+
+        javaMailSender.send(mimeMessage);
+        log.info("mail gönderildi.");
+    }
+
+    public void sendMailToDelete(String email) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("İstek");
+        mimeMessageHelper.setText("<div> İsteğiniz onaylanmadı.</div>", true);
 
         javaMailSender.send(mimeMessage);
         log.info("mail gönderildi.");

@@ -4,6 +4,7 @@ package com.kadiraksoy.partyapp.service;
 import com.kadiraksoy.partyapp.dto.party.PartyRequestDto;
 import com.kadiraksoy.partyapp.dto.party.PartyResponseDto;
 import com.kadiraksoy.partyapp.exception.PartyNotFoundException;
+import com.kadiraksoy.partyapp.kafka.producer.KafkaProducer;
 import com.kadiraksoy.partyapp.mapper.party.PartyMapper;
 import com.kadiraksoy.partyapp.model.party.Party;
 import com.kadiraksoy.partyapp.model.user.User;
@@ -21,15 +22,18 @@ public class PartyService {
     private final PartyMapper partyMapper;
     private final UserService userService;
     private final EmailService emailService;
+    private final KafkaProducer kafkaProducer;
 
     public PartyService(PartyRepository partyRepository,
                         PartyMapper partyMapper,
                         UserService userService,
-                        EmailService emailService) {
+                        EmailService emailService,
+                        KafkaProducer kafkaProducer) {
         this.partyRepository = partyRepository;
         this.partyMapper = partyMapper;
         this.userService = userService;
         this.emailService = emailService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     public PartyResponseDto createParty(PartyRequestDto partyRequestDto){
@@ -43,10 +47,11 @@ public class PartyService {
         log.info("party:" + party);
 
         // Kafkaya yollayıp yap.
-        emailService.sendMailAllUsers("Partiye davetlisiniz:"
-                + party.getTitle()
-                + party.getDescription()
-                + party.getEventDate());
+//        emailService.sendMailAllUsers("Partiye davetlisiniz:"
+//                + party.getTitle()
+//                + party.getDescription()
+//                + party.getEventDate());
+        kafkaProducer.producePartyRequestDtoData(partyRequestDto);
 
         return partyMapper.entityToPartyResponseDto(party);
     }

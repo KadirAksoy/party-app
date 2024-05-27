@@ -8,9 +8,12 @@ import com.kadiraksoy.partyapp.model.request.Request;
 import com.kadiraksoy.partyapp.model.user.Role;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.RequestRepository;
+import com.kadiraksoy.partyapp.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -20,12 +23,14 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final EmailService emailService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public RequestService(RequestMapper requestMapper, RequestRepository requestRepository, EmailService emailService, UserService userService) {
+    public RequestService(RequestMapper requestMapper, RequestRepository requestRepository, EmailService emailService, UserService userService, UserRepository userRepository) {
         this.requestMapper = requestMapper;
         this.requestRepository = requestRepository;
         this.emailService = emailService;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
 
@@ -43,12 +48,23 @@ public class RequestService {
     public String acceptToAdmin(String email) throws MessagingException {
         User user = userService.getUserByEmail(email);
         user.setRole(Role.ROLE_ADMIN);
+        userRepository.save(user);
         Request request = requestRepository.findByEmail(email);
         request.setAccept(true);
-        userService.save(user);
+
 
         emailService.sendMailToAdmin(email);
         return "User admin yapıldı.";
+    }
+
+    public void deleteRequest(Long id) throws MessagingException {
+        Optional<Request> request = requestRepository.findById(id);
+        String email = request.get().getEmail();
+        requestRepository.deleteById(id);
+        log.info("request silindi.");
+
+        emailService.sendMailToDelete(email);
+
     }
 
 
