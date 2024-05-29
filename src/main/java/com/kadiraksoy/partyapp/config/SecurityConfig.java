@@ -86,6 +86,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/api/requests/accept").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/requests/**").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/requests/**").permitAll()
+                        //CommentController
+                        .requestMatchers(HttpMethod.GET,"/api/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/requests/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/requests/**").permitAll()
                         //Swagger
                         .requestMatchers(
                                         "/auth/**",

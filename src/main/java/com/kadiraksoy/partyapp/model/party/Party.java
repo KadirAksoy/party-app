@@ -1,6 +1,7 @@
 package com.kadiraksoy.partyapp.model.party;
 
 
+import com.kadiraksoy.partyapp.model.comment.Comment;
 import com.kadiraksoy.partyapp.model.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -43,8 +44,7 @@ public class Party {
     private List<User> participants;
     private Long imageId;
     private boolean active;
-//    @OneToMany(mappedBy = "party")
-//    private List<Comment> comments;
+
 
     @Override
     public String toString() {
