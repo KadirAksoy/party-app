@@ -83,7 +83,7 @@ public class SecurityConfig {
                         //RequestController
                         .requestMatchers(HttpMethod.GET,"/api/requests/**").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.POST,"/api/requests/send").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/requests/accept").hasAuthority("ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/requests/accept/{email}").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/requests/**").hasAuthority("ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/requests/**").permitAll()
                         //CommentController

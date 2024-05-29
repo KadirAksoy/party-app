@@ -34,7 +34,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/getComment/{id}")
     public ResponseEntity<CommentResponseDto> getCommentById(@PathVariable Long id) {
         CommentResponseDto comment = commentService.findById(id);
         if (comment != null) {
@@ -46,7 +46,7 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto) {
         CommentResponseDto updatedComment = commentService.update(id, commentRequestDto);
         if (updatedComment != null) {
@@ -58,14 +58,14 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
         commentService.delete(id);
         log.info("Comment deleted with id: {}", id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/party/{partyId}")
+    @GetMapping("/getCommentByPartyId/{partyId}")
     public ResponseEntity<List<CommentResponseDto>> getCommentsByPartyId(@PathVariable Long partyId) {
         List<CommentResponseDto> comments = commentService.getCommentsByPartyId(partyId);
         log.info("Retrieved comments for party id: {}, count: {}", partyId, comments.size());

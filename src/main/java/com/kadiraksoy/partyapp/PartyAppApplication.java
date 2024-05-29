@@ -24,49 +24,47 @@ public class PartyAppApplication {
 		SpringApplication.run(PartyAppApplication.class, args);
 	}
 
-//
+
 //	@Bean
 //	CommandLineRunner runner(UserRepository userRepository, PasswordEncoder passwordEncoder){
 //		return args -> {
 //			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //			Date birthdayDate = dateFormat.parse("1990-05-20");
-//
-//
-//			User user = User
-//					.builder()
-//					.firstName("user")
-//					.lastName("user")
-//					.email("user@user.com")
-//					.password(passwordEncoder.encode("password"))
-//					.birthdayDate(birthdayDate)
-//					.role(Role.ROLE_USER)
-//					.active(true)
-//					.build();
-//
-//			User admin = User
-//					.builder()
-//					.firstName("admin")
-//					.lastName("admin")
-//					.email("admin@admin.com")
-//					.password(passwordEncoder.encode("password"))
-//					.birthdayDate(birthdayDate)
-//					.role(Role.ROLE_ADMIN)
-//					.active(true)
-//					.build();
+////			User user = User
+////					.builder()
+////					.firstName("user")
+////					.lastName("user")
+////					.email("user@user.com")
+////					.password(passwordEncoder.encode("password"))
+////					.birthdayDate(birthdayDate)
+////					.role(Role.ROLE_USER)
+////					.active(true)
+////					.build();
+////
+////			User admin = User
+////					.builder()
+////					.firstName("admin")
+////					.lastName("admin")
+////					.email("admin@admin.com")
+////					.password(passwordEncoder.encode("password"))
+////					.birthdayDate(birthdayDate)
+////					.role(Role.ROLE_ADMIN)
+////					.active(true)
+////					.build();
 //
 //			User superAdmin = User
 //					.builder()
 //					.firstName("super admin")
 //					.lastName("super admin")
-//					.email("superadmin@admin.com")
+//					.email("super@admin.com")
 //					.password(passwordEncoder.encode("password"))
 //					.birthdayDate(birthdayDate)
 //					.role(Role.ROLE_SUPERADMIN)
 //					.active(true)
 //					.build();
-//
-//			userRepository.save(user);
-//			userRepository.save(admin);
+////
+////			userRepository.save(user);
+////			userRepository.save(admin);
 //			userRepository.save(superAdmin);
 //		};
 //	}
