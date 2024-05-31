@@ -34,6 +34,5 @@ build/
 .vscode/
 
 
-
 ### Ignore application.yml ###
 application.yml
