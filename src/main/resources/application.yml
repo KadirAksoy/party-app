@@ -1,6 +1,0 @@
-spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: localguideappwelcome@gmail.com
-    password: oeuyupldjdiquetg
