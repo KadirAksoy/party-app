@@ -1,6 +1,8 @@
 package com.kadiraksoy.partyapp.service;
+import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.exception.UserAlreadyExistException;
 import com.kadiraksoy.partyapp.exception.UserNotFoundException;
+import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.user.User;
 import com.kadiraksoy.partyapp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +20,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public UserDetailsService userDetailsService() {
@@ -61,8 +65,8 @@ public class UserService {
     }
 
 //    @Cacheable(value = "users", key = "#root.methodName", unless = "#result == null")
-    public List<User> getAll(){
-        return userRepository.findAll();
+    public List<UserResponseDto> getAll(){
+        return userRepository.findAll().stream().map(userMapper::toUserResponseDto).collect(Collectors.toList());
     }
 
     public List<String> getAllEmails(){

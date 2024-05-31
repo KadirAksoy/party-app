@@ -64,4 +64,17 @@ public class PartyController {
         PartyResponseDto party = partyService.leaveParty(partyId, userId);
         return new ResponseEntity<>(party, HttpStatus.OK);
     }
+
+
+    @GetMapping("/getActive")
+    public ResponseEntity<List<PartyResponseDto>> getActiveParties() {
+        List<PartyResponseDto> parties = (List<PartyResponseDto>) partyService.getActiveParties();
+        return ResponseEntity.ok(parties);
+    }
+
+    @GetMapping("/getByAdminId/{adminId}")
+    public ResponseEntity<List<PartyResponseDto>> getPartiesByAdminId(@PathVariable Long adminId) {
+        List<PartyResponseDto> parties = (List<PartyResponseDto>) partyService.getPartiesByAdminId(adminId);
+        return ResponseEntity.ok(parties);
+    }
 }

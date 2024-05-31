@@ -1,25 +1,25 @@
 version: '3.8'
 services:
-  mysql_db:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: partydb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
-    ports:
-      - "3306:3306"
-      -
-  redis-server:
-    container_name: redis
-    image: 'redis'
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
-    ports:
-      - "6379:6379"
+#  mysql_db:
+#    image: mysql:8.0
+#    command: --default-authentication-plugin=mysql_native_password
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_PASSWORD: 1234
+#      MYSQL_DATABASE: partydb
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: 1234
+#    ports:
+#      - "3306:3306"
+#      -
+#  redis-server:
+#    container_name: redis
+#    image: 'redis'
+#    environment:
+#      - ALLOW_EMPTY_PASSWORD=yes
+#      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+#    ports:
+#      - "6379:6379"
 #  zipkin:
 #    image: openzipkin/zipkin
 #    container_name: zipkin
@@ -67,16 +67,16 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
-  party_app:
-    build:
-      context: ./party-app
-      dockerfile: Dockerfile
-    container_name: party-app
-    ports:
-      - "8080:8080"
-    networks:
-      - back-tier
-    restart: always
-
-networks:
-  back-tier:
+#  party_app:
+#    build:
+#      context: ./party-app
+#      dockerfile: Dockerfile
+#    container_name: party-app
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - back-tier
+#    restart: always
+#
+#networks:
+#  back-tier:

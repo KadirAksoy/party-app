@@ -6,7 +6,7 @@ import com.kadiraksoy.partyapp.dto.party.PartyRequestDto;
 import com.kadiraksoy.partyapp.dto.party.PartyResponseDto;
 import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.exception.PartyNotFoundException;
-import com.kadiraksoy.partyapp.kafka.producer.KafkaProducer;
+//import com.kadiraksoy.partyapp.kafka.producer.KafkaProducer;
 import com.kadiraksoy.partyapp.mapper.party.PartyMapper;
 import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.party.Party;
@@ -16,7 +16,9 @@ import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,19 +28,20 @@ public class PartyService {
     private final PartyMapper partyMapper;
     private final UserService userService;
     private final EmailService emailService;
-    private final KafkaProducer kafkaProducer;
+//    private final KafkaProducer kafkaProducer;
     private final UserMapper userMapper;
 
     public PartyService(PartyRepository partyRepository,
                         PartyMapper partyMapper,
                         UserService userService,
                         EmailService emailService,
-                        KafkaProducer kafkaProducer, UserMapper userMapper) {
+//                        KafkaProducer kafkaProducer,
+                        UserMapper userMapper) {
         this.partyRepository = partyRepository;
         this.partyMapper = partyMapper;
         this.userService = userService;
         this.emailService = emailService;
-        this.kafkaProducer = kafkaProducer;
+//        this.kafkaProducer = kafkaProducer;
         this.userMapper = userMapper;
     }
 
@@ -53,11 +56,11 @@ public class PartyService {
         log.info("party:" + party);
 
         // Kafkaya yollayıp yap.
-//        emailService.sendMailAllUsers("Partiye davetlisiniz:"
-//                + party.getTitle()
-//                + party.getDescription()
-//                + party.getEventDate());
-        kafkaProducer.sendPartyCreateMessage(partyRequestDto);
+        emailService.sendMailAllUsers("Partiye davetlisiniz:"
+                + party.getTitle()
+                + party.getDescription()
+                + party.getEventDate());
+//        kafkaProducer.sendPartyCreateMessage(partyRequestDto);
 
         return partyMapper.entityToPartyResponseDto(party);
     }
@@ -89,7 +92,17 @@ public class PartyService {
 
         return partyMapper.entityToPartyResponseDto(party);
     }
+    public List<PartyResponseDto> getPartiesByAdminId(Long adminId) {
+        List<Party> parties = partyRepository.findAllByAdmin_Id(adminId);
+        if (parties.isEmpty()) {
+            throw new PartyNotFoundException("No parties found for admin with id " + adminId);
+        }
+        return parties.stream().map(partyMapper::entityToPartyResponseDto).toList();
+    }
 
+    public List<PartyResponseDto> getActiveParties() {
+        return partyRepository.findByActiveTrue().stream().map(partyMapper::entityToPartyResponseDto).toList();
+    }
     public List<PartyResponseDto> getAll(){
         return partyRepository.findAll().stream().map(partyMapper::entityToPartyResponseDto).toList();
     }
@@ -117,15 +130,16 @@ public class PartyService {
                 .lastName(user.getLastName())
                 .build();
 
-        kafkaProducer.sendPartyJoinMessage(joinPartyDto);
+//        kafkaProducer.sendPartyJoinMessage(joinPartyDto);
 
-//        emailService.sendMail(user.getEmail(),
-//                user.getFirstName(),
-//                user.getLastName(),
-//                "Partiye katıldınız.Parti bilgileri:"
-//                        + partyResponseDto.getTitle()
-//                        + partyResponseDto.getDescription()
-//                        + partyResponseDto.getEventDate());
+        emailService.sendMail(
+                joinPartyDto.getEmail(),
+                joinPartyDto.getFirstName(),
+                joinPartyDto.getLastName(),
+                "Partiye katıldınız.Parti bilgileri:"
+                        + joinPartyDto.getTitle()
+                        + joinPartyDto.getDescription()
+                        + joinPartyDto.getEventDate());
 
         log.info("User " + userId + " has joined the party " + partyId);
 

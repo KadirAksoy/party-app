@@ -1,15 +1,15 @@
 package com.kadiraksoy.partyapp.mapper.user;
 
 
-import com.kadiraksoy.partyapp.dto.user.UserLoginRequest;
 import com.kadiraksoy.partyapp.dto.user.UserRegisterRequest;
-import com.kadiraksoy.partyapp.dto.user.UserRequestDto;
 import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
+import com.kadiraksoy.partyapp.mapper.party.PartyMapper;
 import com.kadiraksoy.partyapp.model.user.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Component
 public class UserMapper {
@@ -31,6 +31,12 @@ public class UserMapper {
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
+        dto.setCreatedTime(user.getCreatedTime());
+        dto.setUpdatedTime(user.getUpdatedTime());
+        dto.setActive(String.valueOf(user.isActive()));
+        dto.setBirthdayDate(user.getBirthdayDate());
+        dto.setOtp(user.getOtp());
+        dto.setOtpGeneratedTime(user.getOtpGeneratedTime());
         return dto;
     }
 

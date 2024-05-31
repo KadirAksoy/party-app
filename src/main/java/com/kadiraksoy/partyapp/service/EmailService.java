@@ -2,7 +2,7 @@ package com.kadiraksoy.partyapp.service;
 
 
 import com.kadiraksoy.partyapp.dto.email.EmailResponseDto;
-import com.kadiraksoy.partyapp.model.user.User;
+import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +37,13 @@ public class EmailService {
     }
 
     public EmailResponseDto sendMailAllUsers(String message) {
-        List<User> userList = userService.getAll();
+
+        List<UserResponseDto> userList = userService.getAll();
 
         List<String> emailList = new ArrayList<>();
-        for (User user : userList) {
+        for (UserResponseDto user : userList) {
             try {
-                if(user.isActive()){
+                if(user.getActive().equals("true")) {
                     sendMail(user.getEmail(), user.getFirstName(), user.getLastName(), message);
                     emailList.add(user.getEmail());
                 }

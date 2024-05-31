@@ -3,6 +3,7 @@ import com.kadiraksoy.partyapp.exception.PartyNotFoundException;
 import com.kadiraksoy.partyapp.model.file.ImageData;
 import com.kadiraksoy.partyapp.service.ImageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,7 +50,7 @@ public class ImageController {
     public ResponseEntity<?> getImage(@PathVariable("id") Long id) {
         try {
             byte[] imageData = imageService.getImageData(id);
-            return ResponseEntity.ok(imageData);
+            return ResponseEntity.ok().contentType(MediaType.valueOf("image/jpeg")).body(imageData);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

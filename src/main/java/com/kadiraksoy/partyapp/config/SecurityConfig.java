@@ -21,10 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.cors.CorsUtils;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity// metot tabanlı güvenlik konfigürasyonunu etkinleştirir.
+//@EnableMethodSecurity// metot tabanlı güvenlik konfigürasyonunu etkinleştirir.
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -55,7 +56,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         //AuthController
                         .requestMatchers(HttpMethod.POST, "/api/users/signup", "/api/users/signing").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/users/regenerate-otp", "/api/users/verify-account").permitAll()
@@ -70,7 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/admins").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/test/superadmin").hasAuthority("ROLE_SUPERADMIN")
                         //ImageController
-                        .requestMatchers(HttpMethod.GET,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/images/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")
                         .requestMatchers(HttpMethod.PUT,"/api/images/**").hasAnyAuthority("ROLE_ADMIN","ROLE_SUPERADMIN")

@@ -46,8 +46,6 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "admin")
     private List<Party> parties;
-    @OneToMany(mappedBy = "admin")
-    private List<Party> adminParties;
 
     @ManyToMany(mappedBy = "participants")
     private List<Party> participantParties;

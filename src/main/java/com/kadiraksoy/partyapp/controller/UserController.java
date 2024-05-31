@@ -1,5 +1,6 @@
 package com.kadiraksoy.partyapp.controller;
 
+import com.kadiraksoy.partyapp.dto.user.UserResponseDto;
 import com.kadiraksoy.partyapp.exception.UserAlreadyExistException;
 import com.kadiraksoy.partyapp.exception.UserNotFoundException;
 import com.kadiraksoy.partyapp.model.user.User;
@@ -66,8 +67,8 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAll();
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 

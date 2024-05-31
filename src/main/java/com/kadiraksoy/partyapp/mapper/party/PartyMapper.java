@@ -6,17 +6,20 @@ import com.kadiraksoy.partyapp.mapper.user.UserMapper;
 import com.kadiraksoy.partyapp.model.party.Party;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class PartyMapper {
 
-    private final UserMapper userMapper;
+    private  UserMapper userMapper = null;
 
     public PartyMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
 
 
-    public Party dtoToEntity(PartyRequestDto partyRequestDto){
+    public  Party dtoToEntity(PartyRequestDto partyRequestDto){
         return Party.builder()
                 .title(partyRequestDto.getTitle())
                 .description(partyRequestDto.getDescription())
@@ -27,7 +30,7 @@ public class PartyMapper {
                 .build();
     }
 
-    public PartyResponseDto entityToPartyResponseDto(Party party){
+    public  PartyResponseDto entityToPartyResponseDto(Party party){
         return PartyResponseDto.builder()
                 .id(party.getId())
                 .createdTime(party.getCreatedTime())
@@ -41,5 +44,11 @@ public class PartyMapper {
                 .admin(userMapper.toUserResponseDto(party.getAdmin()))
                 .active(true)
                 .build();
+    }
+
+    public  List<PartyResponseDto> toPartyResponseDtoList(List<Party> parties) {
+        return parties.stream()
+                .map(this::entityToPartyResponseDto)
+                .collect(Collectors.toList());
     }
 }
