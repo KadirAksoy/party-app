@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -48,6 +49,7 @@ public class PartyService {
     public PartyResponseDto createParty(PartyRequestDto partyRequestDto){
         Party party = partyMapper.dtoToEntity(partyRequestDto);
         User user = userService.getUserById(partyRequestDto.getAdminId());
+
         log.info("user:" + user);
 
         party.setAdmin(user);
@@ -166,6 +168,19 @@ public class PartyService {
 
         return partyMapper.entityToPartyResponseDto(updatedParty);
     }
+
+
+    public List<PartyResponseDto> getPartiesByUserId(Long userId) {
+        User user = userService.getUserById(userId);
+
+        if (user.getParticipantParties() == null) {
+            return Collections.emptyList();
+        }
+        return user.getParticipantParties().stream()
+                .map(partyMapper::entityToPartyResponseDto)
+                .collect(Collectors.toList());
+    }
+
 
 
 }

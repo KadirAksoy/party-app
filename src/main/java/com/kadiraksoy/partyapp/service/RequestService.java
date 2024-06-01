@@ -13,6 +13,7 @@ import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,15 +47,15 @@ public class RequestService {
         return requestMapper.entityToResponseDto(request);
     }
 
-    public String acceptToAdmin(String email) throws MessagingException {
-        User user = userService.getUserByEmail(email);
+    public String acceptToAdmin(Long id) throws MessagingException {
+        User user = userService.getUserById(id);
         user.setRole(Role.ROLE_ADMIN);
         userRepository.save(user);
-        Request request = requestRepository.findByEmail(email);
+        Request request = requestRepository.findByEmail(user.getEmail());
         request.setAccept(true);
 
 
-        emailService.sendMailToAdmin(email);
+        emailService.sendMailToAdmin(user.getEmail());
         return "User admin yapıldı.";
     }
 
@@ -67,8 +68,9 @@ public class RequestService {
         emailService.sendMailToDelete(email);
     }
 
-    public RequestResponseDto getAll(){
-        return (RequestResponseDto) requestRepository.findAll().stream().map(requestMapper::entityToResponseDto).collect(Collectors.toList());
+    public List<RequestResponseDto>getAll() {
+        List<Request> requests = requestRepository.findAll();
+        return requestMapper.toUserResponseDtoList(requests);
     }
 
 

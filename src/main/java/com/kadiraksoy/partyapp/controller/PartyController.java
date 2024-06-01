@@ -77,4 +77,10 @@ public class PartyController {
         List<PartyResponseDto> parties = (List<PartyResponseDto>) partyService.getPartiesByAdminId(adminId);
         return ResponseEntity.ok(parties);
     }
+
+    @GetMapping("/{userId}/parties")
+    public ResponseEntity<List<PartyResponseDto>> getPartiesByUserId(@PathVariable Long userId) {
+        List<PartyResponseDto> parties = partyService.getPartiesByUserId(userId);
+        return ResponseEntity.ok(parties);
+    }
 }

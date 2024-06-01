@@ -37,6 +37,7 @@ public class UserMapper {
         dto.setBirthdayDate(user.getBirthdayDate());
         dto.setOtp(user.getOtp());
         dto.setOtpGeneratedTime(user.getOtpGeneratedTime());
+        dto.setRole(user.getRole().name());
         return dto;
     }
 

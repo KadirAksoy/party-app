@@ -27,11 +27,11 @@ public class RequestController {
         }
     }
 
-    @PostMapping("/accept/{email}")
-    public ResponseEntity<String> acceptToAdmin(@PathVariable String email) {
+    @PostMapping("/accept/{id}")
+    public ResponseEntity<String> acceptToAdmin(@PathVariable Long id) {
         try {
-            String response = requestService.acceptToAdmin(email);
-            return ResponseEntity.ok(response);
+           requestService.acceptToAdmin(id);
+            return ResponseEntity.ok("User admin yapıldı");
         } catch (MessagingException e) {
             return ResponseEntity.status(500).body("An error occurred while sending email.");
         }
@@ -49,7 +49,7 @@ public class RequestController {
 
     @GetMapping("/all")
     public ResponseEntity<List<RequestResponseDto>> getAllRequests() {
-        List<RequestResponseDto> requests = (List<RequestResponseDto>) requestService.getAll();
+        List<RequestResponseDto> requests = requestService.getAll();
         return ResponseEntity.ok(requests);
     }
 

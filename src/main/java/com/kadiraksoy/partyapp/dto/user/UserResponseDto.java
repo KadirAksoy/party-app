@@ -27,6 +27,7 @@ public class UserResponseDto {
     private String active;
     private String otp;
     private LocalDateTime otpGeneratedTime;
+    private String role;
 //    private List<PartyResponseDto> partyResponseDtoList;
 
 }

@@ -44,6 +44,16 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserResponse/{id}")
+    public ResponseEntity<UserResponseDto> getUserResponseById(@PathVariable Long id) {
+        try {
+            UserResponseDto user = userService.getUserResponseById(id);
+            return ResponseEntity.ok(user);
+        } catch (UserNotFoundException e) {
+            log.error("Error retrieving user: ", e);
+            return ResponseEntity.status(404).body(null);
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         try {
@@ -76,5 +86,16 @@ public class UserController {
     public ResponseEntity<List<String>> getAllEmails() {
         List<String> emails = userService.getAllEmails();
         return ResponseEntity.ok(emails);
+    }
+
+    @GetMapping("/emailUserResponse/{email}")
+    public ResponseEntity<UserResponseDto> getUserResponseByEmail(@PathVariable String email) {
+        try {
+            UserResponseDto user = userService.getUserResponseByEmail(email);
+            return ResponseEntity.ok(user);
+        } catch (UserNotFoundException e) {
+            log.error("Error retrieving user: ", e);
+            return ResponseEntity.status(404).body(null);
+        }
     }
 }
